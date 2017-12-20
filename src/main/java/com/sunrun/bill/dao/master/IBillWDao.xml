@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrun.bill.dao.master.IBillWDao">
+	 
+ <insert id="insertDetailList" useGeneratedKeys="true" >  
+	     <selectKey resultType="int" keyProperty="id" order="AFTER">  
+	       select next value for BILL_DETAIL_SEQ  FROM SYSIBM.SYSDUMMY1  
+	    </selectKey>  
+	    insert into bill_detail (
+	    						channel_time,wrong_reason_flag,
+	    						database_trx_id,file_trx_id, 
+	    						control_id,db_amount,file_amount,
+	    						cust_card_no,channel_code,bill_date,create_time,mcht_no,bat_id,DB_ORDER_STATUS,CHANNEL_ORDER_STATUS)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	        (
+	    	 #{item.channel_time},
+	         #{item.wrong_reason_flag,jdbcType=VARCHAR},
+	         #{item.database_trx_id,jdbcType=VARCHAR},
+	         #{item.file_trx_id,jdbcType=VARCHAR}, 
+	         #{foreign_key},
+	         #{item.db_amount},
+	         #{item.file_amount},
+	         #{item.cust_card_no},
+	         #{item.channel_code}, 
+	         to_char(to_date(#{item.bill_date},'yyyymmdd'),'yyyy-mm-dd'),
+	         current_timestamp,
+	         #{item.mcht_no},
+	         #{bat_id},
+             #{item.dbOrderStatus,jdbcType=VARCHAR},
+             #{item.channelOrderStatus,jdbcType=VARCHAR}
+	        )  
+	    </foreach>  
+	</insert> 
+	
+	<insert id="insertBillControlDetail" useGeneratedKeys="true"  parameterType="com.sunrun.bill.model.BillDetailDO"  >  
+         <selectKey resultType="long" keyProperty="id" order="AFTER">  
+           select next value for BILL_DETAIL_SEQ  FROM SYSIBM.SYSDUMMY1  
+        </selectKey>  
+        insert into bill_detail (
+                                channel_time,wrong_reason_flag,
+                                database_trx_id,file_trx_id, 
+                                control_id,db_amount,file_amount,
+                                cust_card_no,channel_code,bill_date,create_time,mcht_no,bat_id,DB_ORDER_STATUS,CHANNEL_ORDER_STATUS)   
+        values  
+            (
+            
+             #{channel_time},
+             #{wrong_reason_flag,jdbcType=VARCHAR},
+             #{database_trx_id,jdbcType=VARCHAR},
+             #{file_trx_id,jdbcType=VARCHAR}, 
+             #{control_id},
+             #{db_amount},
+             #{file_amount},
+             #{cust_card_no},
+             #{channel_code}, 
+             to_char(to_date(#{bill_date},'yyyymmdd'),'yyyy-mm-dd'),
+             current_timestamp,
+             #{mcht_no},
+             #{bat_id},
+             #{dbOrderStatus,jdbcType=VARCHAR},
+             #{channelOrderStatus,jdbcType=VARCHAR}
+            )  
+    </insert>  
+	
+	<insert id="insertControl" useGeneratedKeys="true" parameterType="com.sunrun.bill.model.BillControlDO"  
+	keyProperty="id">
+		<![CDATA[
+		insert into 
+			bill_control (file_name,channel_code,
+						  bill_date,balance_amount,balance_bills_account,
+						  total_bills_account,wrong_bills_account,
+						  db_bills_account,file_bills_account,create_time,mcht_no,total_bills_amount,bat_id)
+		values(
+			#{fileName},
+			#{channelCode},
+			to_date(#{billDate},'yyyy-mm-dd'),
+			#{balanceAmount},
+			#{balanceBillsAccount},
+			#{totalBillsAccount},
+			#{wrongBillsAccount},
+			#{dbBillsAccount},
+			#{fileBillsAccount},
+			current_timestamp,
+			#{mchtNo},
+			#{totalBillsAmount},
+			#{batId}
+		)
+		]]>
+	</insert>
+	
+	<update id="updateOrderBillStatus" parameterType="com.sunrun.bill.model.BillOrderDO">
+         update orders set RECONCILIATION_STATUS=#{reconciliationStatus,jdbcType=VARCHAR}
+        where trx_id=#{trx_id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateOrderStatus" parameterType="com.sunrun.bill.model.BillOrderDO">
+         update orders set STATUS=#{status,jdbcType=VARCHAR}
+        where trx_id=#{trx_id,jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+	<!-- 配置dataSource -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${mpay.write.jdbc.url}"/>
+		<property name="username" value="${mpay.write.jdbc.username}"/>
+		<property name="password" value="${mpay.write.jdbc.password}"/>
+		<property name="initialSize" value="${mpay.write.initialSize}"/>
+		<property name="maxActive" value="${mpay.write.maxActive}"/>
+		<property name="minIdle" value="${mpay.write.minIdle}"/>
+		<property name="maxWait" value="${mpay.write.maxWait}"/>
+		<property name="poolPreparedStatements" value="${mpay.write.poolPreparedStatements}"/>
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="${mpay.write.maxPoolPreparedStatementPerConnectionSize}"/>
+		<property name="validationQuery" value="${mpay.write.validationQuery}"/>
+		<property name="testOnBorrow" value="${mpay.write.testOnBorrow}"/>
+		<property name="testOnReturn" value="${mpay.write.testOnReturn}"/>
+		<property name="testWhileIdle" value="${mpay.write.testWhileIdle}"/>
+		<property name="timeBetweenEvictionRunsMillis" value="${mpay.write.timeBetweenEvictionRunsMillis}"/>
+		<property name="minEvictableIdleTimeMillis" value="${mpay.write.minEvictableIdleTimeMillis}"/>
+		<property name="removeAbandoned" value="${mpay.write.removeAbandoned}"/>
+		<property name="removeAbandonedTimeout" value="${mpay.write.removeAbandonedTimeout}"/>
+		<property name="logAbandoned" value="${mpay.write.logAbandoned}"/>
+		<property name="filters" value="${mpay.write.filters}"/>
+		<property name="driverClassName" value="${mpay.write.jdbc_driverClassName}" />
+	</bean>
+
+<!-- 配置dataSource -->
+<!-- 	<bean name="mpayTxnDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> -->
+<!-- 		<property name="url" value="${mpay.write.jdbc.url}"/> -->
+<!-- 		<property name="username" value="${mpay.write.jdbc.username}"/> -->
+<!-- 		<property name="password" value="${mpay.write.jdbc.password}"/> -->
+<!-- 		<property name="initialSize" value="${mpay.write.initialSize}"/> -->
+<!-- 		<property name="maxActive" value="${mpay.write.maxActive}"/> -->
+<!-- 		<property name="minIdle" value="${mpay.write.minIdle}"/> -->
+<!-- 		<property name="maxWait" value="${mpay.write.maxWait}"/> -->
+<!-- 		<property name="poolPreparedStatements" value="${mpay.write.poolPreparedStatements}"/> -->
+<!-- 		<property name="maxPoolPreparedStatementPerConnectionSize" value="${mpay.write.maxPoolPreparedStatementPerConnectionSize}"/> -->
+<!-- 		<property name="validationQuery" value="${mpay.write.validationQuery}"/> -->
+<!-- 		<property name="testOnBorrow" value="${mpay.write.testOnBorrow}"/> -->
+<!-- 		<property name="testOnReturn" value="${mpay.write.testOnReturn}"/> -->
+<!-- 		<property name="testWhileIdle" value="${mpay.write.testWhileIdle}"/> -->
+<!-- 		<property name="timeBetweenEvictionRunsMillis" value="${mpay.write.timeBetweenEvictionRunsMillis}"/> -->
+<!-- 		<property name="minEvictableIdleTimeMillis" value="${mpay.write.minEvictableIdleTimeMillis}"/> -->
+<!-- 		<property name="removeAbandoned" value="${mpay.write.removeAbandoned}"/> -->
+<!-- 		<property name="removeAbandonedTimeout" value="${mpay.write.removeAbandonedTimeout}"/> -->
+<!-- 		<property name="logAbandoned" value="${mpay.write.logAbandoned}"/> -->
+<!-- 		<property name="filters" value="${mpay.write.filters}"/> -->
+<!-- 		<property name="driverClassName" value="${mpay.write.jdbc_driverClassName}" /> -->
+<!-- 	</bean> -->
+
+	<!-- 配置sqlSessionFactory-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:config/mybatis.xml" />
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+</beans>

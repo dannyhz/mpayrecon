@@ -1,0 +1,81 @@
+CREATE OR REPLACE PROCEDURE "MPOS"."SP_BANK_MCH_TOTAL" (
+    IN "I_BATID"	DECIMAL(20,0),
+    IN "I_CKDT"	CHARACTER(10),
+    IN "I_CHLNO"	VARCHAR(50),--05 微信二清，10 支付宝二清，20 百付宝
+    OUT "O_ERRMSG"	VARCHAR(128) 
+    )
+  LANGUAGE SQL
+BEGIN 
+/*=====================================================================+           
+  功能描述：移动收单多银行交易汇总清单
+						1、目前多机构仅支持普通商户汇总；
+            
+  编写人员：LINYQ
+  设计日期：2017/04/26
+  修改历史：
+  修改日期  修改人员   修改原因
+  
+======================================================================*/
+
+--------------------------常用变量定义--------------------------
+DECLARE IRET INT DEFAULT 0 ;
+--定义SQL异常警告信息捕捉变量
+DECLARE SQLCODE INT DEFAULT 0 ;		        --SQL返回代码
+DECLARE SQLSTATE CHAR(5) DEFAULT '00000' ;--SQL默认返回代码'00000'，返回成功
+--------------------------应用变量定义---------------------------
+DECLARE V_SMDT CHAR(8);
+DECLARE V_BATID DEC(20);
+DECLARE V_CKDT DATE;
+----------------------------------异常日志处理-------------------------
+--SQL产生的非上述异常的处理
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+	SET O_ERRMSG = O_ERRMSG ||',SQLCODE = '|| TRIM(CHAR(SQLCODE)) || ',SQLSTATE = '||SQLSTATE;	
+	--ROLLBACK ;
+END;
+
+SET O_ERRMSG = '-1';
+--确定日期\对账批次号
+SET V_SMDT = TO_CHAR(CURRENT DATE, 'YYYYMMDD');
+SET V_CKDT = TO_DATE(I_CKDT, 'YYYY-MM-DD');
+
+IF I_BATID = 0 THEN
+	SELECT MAX(BATID) INTO V_BATID FROM MPOS.BAT2_CMP_RESULT WHERE CHANNEL_NO = I_CHLNO AND CKDT = V_CKDT;
+	IF V_BATID IS NULL THEN
+		RETURN;
+	END IF;	
+ELSE
+	SET V_BATID = I_BATID;
+END IF;
+
+SET O_ERRMSG = '-2';
+--检查二级商户表的唯一性
+IF EXISTS (SELECT SUB_ZX_MCHT_NO, COUNT(1) FROM IMP_SECD_SUB_INFO WHERE SUB_ZX_MCHT_NO <> '' GROUP BY SUB_ZX_MCHT_NO HAVING COUNT(1) > 1) THEN
+	RETURN;
+END IF;
+
+SET O_ERRMSG = '-3';
+--汇总普通商户金额 MCHTP = 1
+INSERT INTO MPOS.BAT2_BANK_MCH_TOTAL(BATID, SMDT, BANK_CODE, CHANNEL_NO, MY_MCH_NO, MY_SEC_MCH_NO, MY_SEC_MCH_NM,  
+																		 ACNT, ATRAM, RCNT, RTRAM, TOTAL_FEE, TTRAM, RZAMT, TCNT, MCHTP)
+	SELECT A.V_BATID, A.V_SMDT, A.BANK_CODE, A.CHANNEL_NO, A.MY_MCH_NO, A.MY_SEC_MCH_NO, B.MCHT_NM, --B
+				 A.ACNT, A.ATRAM, A.RCNT, A.RTRAM, A.TOTAL_FEE, A.TTRAM, A.RZAMT, A.TCNT, A.MCHTP
+	FROM (SELECT V_BATID AS V_BATID, V_SMDT AS V_SMDT, BANK_CODE, CHANNEL_NO, MY_MCH_NO, MY_SEC_MCH_NO,
+	  			SUM(CASE WHEN TRTP = '01' THEN 1 ELSE 0 END) AS ACNT,	--正交易笔数
+	  			SUM(CASE WHEN TRTP = '01' THEN TRAM ELSE 0 END) AS ATRAM, --正交易总金额
+		    	SUM(CASE WHEN TRTP IN ('04','21') THEN 1 ELSE 0 END) AS RCNT, --反交易笔数
+	     	    SUM(CASE WHEN TRTP IN ('04','21') THEN TRAM ELSE 0 END) AS RTRAM, --反交易总金额
+	  			COALESCE(SUM(TOTAL_FEE), 0) AS TOTAL_FEE,	--总手续费
+	   			COALESCE(SUM(TRAM), 0) AS TTRAM, --轧差金额
+				COALESCE(SUM(RZAMT), 0) AS RZAMT,	--商户入账金额
+				COUNT(1) AS TCNT, --总笔数
+				1 AS MCHTP
+		 FROM BAT2_CMP_RESULT
+		 WHERE CKDT = V_CKDT AND BATID = V_BATID AND CKFG = 0 AND FZFG = 'N'
+		 GROUP BY BANK_CODE, CHANNEL_NO, MY_MCH_NO, MY_SEC_MCH_NO) AS A	--银行编号，渠道类型, 一级商户号(对应渠道二级商户号), 二级商户号
+	  LEFT JOIN IMP_SECD_SUB_INFO B 
+	  ON A.MY_SEC_MCH_NO = B.SUB_ZX_MCHT_NO;
+		
+COMMIT;
+SET O_ERRMSG = '0';
+END;

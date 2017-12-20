@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrun.bill.dao.slave.IMerchantQueryDao">
+  <resultMap id="BaseResultMap" type="com.sunrun.bill.model.MerchantDO">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="MCHT_NO" jdbcType="VARCHAR" property="mchtNo" />
+    <result column="MCHT_NAME" jdbcType="VARCHAR" property="mchtName" />
+    <result column="SETTLE_ACCOUNT_FLAG" jdbcType="INTEGER" property="settleAccountFlag" />
+    <result column="SETTLE_ACCOUNT" jdbcType="VARCHAR" property="settleAccount" />
+    <result column="SETTLE_NAME" jdbcType="VARCHAR" property="settleName" />
+    <result column="SETTLE_BANK_CODE" jdbcType="VARCHAR" property="settleBankCode" />
+    <result column="SETTLE_BANK_NAME" jdbcType="VARCHAR" property="settleBankName" />
+    <result column="STCD" jdbcType="CHAR" property="stcd" />
+    <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+    <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UPPER_LIMIT_PER_DAY_PER_CUSTOMER" jdbcType="BIGINT" property="upperLimitPerDayPerCustomer" />
+    <result column="LEGAL_PERSON_NAME" jdbcType="VARCHAR" property="legalPersonName" />
+    <result column="LEGAL_PERSON_ID" jdbcType="VARCHAR" property="legalPersonId" />
+    <result column="BUSINESS_LICENSE" jdbcType="VARCHAR" property="businessLicense" />
+    <result column="CONTACT_PERSON_NAME" jdbcType="VARCHAR" property="contactPersonName" />
+    <result column="CONTACT_PHONE" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="CHARGE_PER_TRADE" jdbcType="BIGINT" property="chargePerTrade" />
+    <result column="UPPER_LIMIT_PER_TRADE" jdbcType="BIGINT" property="upperLimitPerTrade" />
+    <result column="sftp_file_path" jdbcType="VARCHAR" property="sftpFilePath" />
+    <result column="olp_switch" jdbcType="VARCHAR" property="olpSwitch" />
+    <result column="olp_flag" jdbcType="VARCHAR" property="olpFlag" />
+    <result column="olp_code" jdbcType="VARCHAR" property="olpCode" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MCHT_NO, MCHT_NAME, SETTLE_ACCOUNT_FLAG, SETTLE_ACCOUNT, SETTLE_NAME, SETTLE_BANK_CODE, 
+    SETTLE_BANK_NAME, STCD, CREATE_BY, UPDATE_BY, CREATE_TIME, UPDATE_TIME, UPPER_LIMIT_PER_DAY_PER_CUSTOMER, 
+    LEGAL_PERSON_NAME, LEGAL_PERSON_ID, BUSINESS_LICENSE, CONTACT_PERSON_NAME, CONTACT_PHONE, 
+    CHARGE_PER_TRADE, UPPER_LIMIT_PER_TRADE,SETTLE_BANK_BRANCH_CODE,sftp_file_path,olp_switch,olp_flag,olp_code
+  </sql>
+  <select id="selectByMchtNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from MERCHANT
+    where MCHT_NO = #{mchtNo,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getMaxMchtNo" resultType="java.lang.String">
+   select 
+    MAX(SUBSTR (char(mcht_no),5,12))
+   from MERCHANT
+  </select>
+  <select id="queryAll" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+    from MERCHANT
+  </select>
+  
+ 
+</mapper>

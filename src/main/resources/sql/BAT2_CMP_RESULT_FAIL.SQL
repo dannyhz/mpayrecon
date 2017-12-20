@@ -1,0 +1,147 @@
+drop table MPOS.BAT2_CMP_RESULT_FAIL;
+CREATE TABLE MPOS.BAT2_CMP_RESULT_FAIL
+(
+ID	DEC(20,0)	NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1,CACHE 100),
+SYSTM	TIMESTAMP	with default CURRENT_TIMESTAMP,
+BATID DEC(20),
+CLDT DATE,
+SRC VARCHAR(10),
+TRTM VARCHAR(30) with default '',
+CHANNEL_NO	VARCHAR(50) with default '',
+CHL_ORDER_ID	VARCHAR(50) with default '',
+MY_ORDER_ID	VARCHAR(50) with default '',
+MCH_NO	VARCHAR(50) with default '',
+SEC_MCH_NO	VARCHAR(50) with default '',
+TRAM	DEC(15,2) with default 0,
+TRTP	VARCHAR(50) with default '',
+REL_ORDER_ID VARCHAR(50) with default '',
+MEMO	VARCHAR(250) with default '',
+BRH_ID VARCHAR(50) with default '',
+MY_MCH_NO VARCHAR(50) with default '',
+MY_SEC_MCH_NO VARCHAR(50) with default '',
+TERM_NO VARCHAR(50) with default '',
+CKTURN INT,
+CKFG INT,
+CKDT DATE,
+TRADE_TYPE  VARCHAR(50) ,
+MCH_ORDER_ID	VARCHAR(50),
+REL_MCH_ORDER_ID VARCHAR(50),
+CKSC_BATID DEC(20),
+PAYBANK VARCHAR(50),
+BANK_CODE VARCHAR(32) DEFAULT '302331033102',
+ primary key (ID)
+);
+
+CREATE INDEX MPOS.BAT2_CMP_RESULT_FAIL_IDX_1 ON MPOS.BAT2_CMP_RESULT_FAIL(MY_ORDER_ID);
+CREATE INDEX MPOS.BAT2_CMP_RESULT_FAIL_IDX_2 ON MPOS.BAT2_CMP_RESULT_FAIL(CKDT);
+CREATE INDEX MPOS.BAT2_CMP_RESULT_FAIL_IDX_3 ON MPOS.BAT2_CMP_RESULT_FAIL(CKSC_BATID);
+--CREATE UNIQUE INDEX MPOS.BAT2_CMP_RESULT_IDX_3 ON MPOS.BAT2_CMP_RESULT(MY_ORDER_ID);
+
+COMMENT ON TABLE MPOS.BAT2_CMP_RESULT_FAIL IS '渠道对账结果失败历史表';
+
+COMMENT ON MPOS.BAT2_CMP_RESULT_FAIL ( 
+ID is 'ID',
+SYSTM is '入库时间戳',
+BATID is '对账批次号',
+CLDT is '清算日期,来源于订单支付完成的渠道日期',
+SRC IS '来源 CHL-MPOS-BOTH',
+TRTM is '交易时间',
+CHANNEL_NO is '渠道',
+CHL_ORDER_ID is '渠道方订单号',
+MY_ORDER_ID is '我方订单号',
+MCH_NO is '渠道商户号',
+SEC_MCH_NO is '渠道二级商户号',
+TRAM is '金额',
+TRTP is '交易类型',
+REL_ORDER_ID IS '相关流水号，用于处理退款、撤销等业务',
+MEMO is '交易备注',
+BRH_ID is '机构号',
+MY_MCH_NO is '我方一级商户号',
+MY_SEC_MCH_NO is '我方二级商户号',
+TERM_NO IS '终端号',
+CKTURN is '对账轮次',
+CKFG is '对账标记',
+CKDT IS '对账日期',
+TRADE_TYPE IS '交易方式，如JSAPI、NATIVE、MICROPAY',
+MCH_ORDER_ID is '商户订单号',
+REL_MCH_ORDER_ID is '商户相关订单号（预留，暂无数据）',
+CKSC_BATID IS '隔日对账成功时的BATID',
+PAYBANK IS '付款银行',
+BANK_CODE IS '银行编号'
+);
+
+
+
+
+
+
+--主库版本
+--drop table MPOS.BAT2_CMP_RESULT_FAIL;
+CREATE TABLE MPOS.BAT2_CMP_RESULT_FAIL
+(
+ID	DEC(20,0)	NOT NULL ,
+SYSTM	TIMESTAMP	with default CURRENT_TIMESTAMP,
+BATID DEC(20),
+CLDT DATE,
+SRC VARCHAR(10),
+TRTM VARCHAR(30) with default '',
+CHANNEL_NO	VARCHAR(50) with default '',
+CHL_ORDER_ID	VARCHAR(50) with default '',
+MY_ORDER_ID	VARCHAR(50) with default '',
+MCH_NO	VARCHAR(50) with default '',
+SEC_MCH_NO	VARCHAR(50) with default '',
+TRAM	DEC(15,2) with default 0,
+TRTP	VARCHAR(50) with default '',
+REL_ORDER_ID VARCHAR(50) with default '',
+MEMO	VARCHAR(250) with default '',
+BRH_ID VARCHAR(50) with default '',
+MY_MCH_NO VARCHAR(50) with default '',
+MY_SEC_MCH_NO VARCHAR(50) with default '',
+TERM_NO VARCHAR(50) with default '',
+CKTURN INT,
+CKFG INT,
+CKDT DATE,
+TRADE_TYPE  VARCHAR(50) ,
+MCH_ORDER_ID	VARCHAR(50),
+REL_MCH_ORDER_ID VARCHAR(50),
+CKSC_BATID DEC(20),
+PAYBANK VARCHAR(50),
+BANK_CODE VARCHAR(32) DEFAULT '',
+ primary key (ID)
+);
+
+CREATE INDEX MPOS.BAT2_CMP_RESULT_FAIL_IDX_1 ON MPOS.BAT2_CMP_RESULT_FAIL(MY_ORDER_ID);
+CREATE INDEX MPOS.BAT2_CMP_RESULT_FAIL_IDX_2 ON MPOS.BAT2_CMP_RESULT_FAIL(CKDT);
+
+COMMENT ON TABLE MPOS.BAT2_CMP_RESULT_FAIL IS '渠道对账结果失败历史表';
+
+COMMENT ON MPOS.BAT2_CMP_RESULT_FAIL ( 
+ID is 'ID',
+SYSTM is '入库时间戳',
+BATID is '对账批次号',
+CLDT is '清算日期,来源于订单支付完成的渠道日期',
+SRC IS '来源 CHL-MPOS-BOTH',
+TRTM is '交易时间',
+CHANNEL_NO is '渠道',
+CHL_ORDER_ID is '渠道方订单号',
+MY_ORDER_ID is '我方订单号',
+MCH_NO is '渠道商户号',
+SEC_MCH_NO is '渠道二级商户号',
+TRAM is '金额',
+TRTP is '交易类型',
+REL_ORDER_ID IS '相关流水号，用于处理退款、撤销等业务',
+MEMO is '交易备注',
+BRH_ID is '机构号',
+MY_MCH_NO is '我方一级商户号',
+MY_SEC_MCH_NO is '我方二级商户号',
+TERM_NO IS '终端号',
+CKTURN is '对账轮次',
+CKFG is '对账标记',
+CKDT IS '对账日期',
+TRADE_TYPE IS '交易方式，如JSAPI、NATIVE、MICROPAY',
+MCH_ORDER_ID is '商户订单号',
+REL_MCH_ORDER_ID is '商户相关订单号（预留，暂无数据）',
+CKSC_BATID IS '隔日对账成功时的BATID',
+PAYBANK IS '付款银行',
+BANK_CODE IS '银行编号'
+);

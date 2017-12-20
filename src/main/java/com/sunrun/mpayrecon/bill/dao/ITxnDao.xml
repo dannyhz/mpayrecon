@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrun.mpayrecon.bill.dao.ITxnDao">
+
+	<resultMap type="citic.hz.mpos.service.dao.po.BillingOrder" id="mkMap">
+		<id column="txn_seq_id" property="id"/>
+		<result column="TPAM_TXN_ID" property="TPAM_TXN_ID" />
+		<result column="TXN_AMT" property="TRAM" />
+	</resultMap>
+	
+ 	 <sql id="all_columns" >
+ 	 	TXN_AMT,
+		TPAM_TXN_ID
+	</sql>
+	
+	<select id="queryTxn" resultMap="mkMap" parameterType="java.lang.String">
+		select  
+		<include refid="all_columns"/>
+		  from ONL_ORDER_TXN_INFO where tpam_txn_id = #{txnId} 
+	</select>
+	
+	<!-- 根据Id进行查询 -->
+<!-- 	<select id="queryKeyById" resultMap="mkMap"> -->
+<!-- 		select -->
+<!-- 			<include refid="mk_columns"/> -->
+<!-- 		from -->
+<!-- 			merchant_key -->
+<!-- 		where -->
+<!-- 			id=#{_parameter} -->
+<!-- 	</select> -->
+</mapper>

@@ -1,0 +1,112 @@
+--drop table MPOS.BAT2_CMP_CHL_FROZEN;
+CREATE TABLE MPOS.BAT2_CMP_CHL_FROZEN
+(
+ID BIGINT	NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1, CACHE 100),
+CRT_TM TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+MDF_TM TIMESTAMP NOT NULL GENERATED ALWAYS FOR EACH ROW ON UPDATE AS ROW CHANGE TIMESTAMP,
+TRTM VARCHAR(30) with default '',
+CHANNEL_NO	VARCHAR(50) with default '',
+CHL_ORDER_ID	VARCHAR(50) with default '',
+MY_ORDER_ID	VARCHAR(50) with default '',
+MCH_NO	VARCHAR(50) with default '',
+SEC_MCH_NO	VARCHAR(50) with default '',
+TRAM	DEC(15,2) with default 0,
+FROZ_FG CHAR(1),
+FRDT	INT,
+UFDT	INT,
+MEMO	VARCHAR(250) with default '',
+BNO VARCHAR(50),
+MY_MCH_NO VARCHAR(50) with default '',
+MY_SEC_MCH_NO VARCHAR(50) with default '',
+MCH_ORDER_ID	VARCHAR(50),
+FREEZER	VARCHAR(20),
+BANK_CODE VARCHAR(32) DEFAULT '',
+ primary key (ID)
+)
+ORGANIZE BY (BNO)
+;
+
+CREATE INDEX MPOS.IDX_BAT2_CMP_RESULT_1 ON MPOS.BAT2_CMP_CHL_FROZEN(MY_ORDER_ID);
+
+COMMENT ON TABLE MPOS.BAT2_CMP_CHL_FROZEN IS '渠道冻结/解冻表';
+
+COMMENT ON MPOS.BAT2_CMP_CHL_FROZEN ( 
+ID is 'ID',
+CRT_TM is '入库时间戳',
+MDF_TM IS '修改时间戳',
+TRTM is '交易时间',
+CHANNEL_NO is '渠道',
+CHL_ORDER_ID is '渠道方订单号',
+MY_ORDER_ID is '我方订单号',
+MCH_NO is '渠道方商户号',
+SEC_MCH_NO is '渠道方二级商户号',
+TRAM is '金额',
+FROZ_FG IS '冻结/解冻标记 F-冻结，U-解冻',
+FRDT is '冻结日期',
+UFDT is '解冻日期',
+MEMO is '交易备注',
+BNO IS '入库批次号（与BATID不同）',
+MY_MCH_NO is '我方一级商户号,对应渠道二级商户号',
+MY_SEC_MCH_NO is '我方二级商户号',
+MCH_ORDER_ID is '商户订单号',
+FREEZER IS '冻结者，WX-微信 ZFB-支付宝 BFB-百付宝 CIB-中信',
+BANK_CODE IS '银行编号'
+);
+
+--主库
+--drop table MPOS.BAT2_CMP_CHL_FROZEN;
+CREATE TABLE MPOS.BAT2_CMP_CHL_FROZEN
+(
+ID BIGINT	NOT NULL ,
+CRT_TM TIMESTAMP NOT NULL,
+MDF_TM TIMESTAMP NOT NULL,
+TRTM VARCHAR(30) with default '',
+CHANNEL_NO	VARCHAR(50) with default '',
+CHL_ORDER_ID	VARCHAR(50) with default '',
+MY_ORDER_ID	VARCHAR(50) with default '',
+MCH_NO	VARCHAR(50) with default '',
+SEC_MCH_NO	VARCHAR(50) with default '',
+TRAM	DEC(15,2) with default 0,
+FROZ_FG CHAR(1),
+FRDT	INT,
+UFDT	INT,
+MEMO	VARCHAR(250) with default '',
+BNO VARCHAR(50),
+MY_MCH_NO VARCHAR(50) with default '',
+MY_SEC_MCH_NO VARCHAR(50) with default '',
+MCH_ORDER_ID	VARCHAR(50),
+FREEZER	VARCHAR(20),
+BANK_CODE VARCHAR(32) DEFAULT '',
+ primary key (ID)
+)
+ORGANIZE BY (FRDT)
+;
+
+COMMENT ON TABLE MPOS.BAT2_CMP_CHL_FROZEN IS '渠道冻结/解冻表';
+
+COMMENT ON MPOS.BAT2_CMP_CHL_FROZEN ( 
+ID is 'ID',
+CRT_TM is '入库时间戳',
+MDF_TM IS '修改时间戳',
+TRTM is '交易时间',
+CHANNEL_NO is '渠道',
+CHL_ORDER_ID is '渠道方订单号',
+MY_ORDER_ID is '我方订单号',
+MCH_NO is '渠道方商户号',
+SEC_MCH_NO is '渠道方二级商户号',
+TRAM is '金额',
+FROZ_FG IS '冻结/解冻标记 F-冻结，U-解冻',
+FRDT is '冻结日期',
+UFDT is '解冻日期',
+MEMO is '交易备注',
+BNO IS '入库批次号（与BATID不同）',
+MY_MCH_NO is '我方一级商户号,对应渠道二级商户号',
+MY_SEC_MCH_NO is '我方二级商户号',
+MCH_ORDER_ID is '商户订单号',
+FREEZER IS '冻结者，WX-微信 ZFB-支付宝 BFB-百付宝 CIB-中信',
+BANK_CODE IS '银行编号'
+);
+
+--nickname
+CREATE OR REPLACE NICKNAME MPOS.NK_BAT2_CMP_CHL_FROZEN
+  FOR SVRWR.MPOS.BAT2_CMP_CHL_FROZEN;	
