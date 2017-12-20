@@ -1,5 +1,15 @@
 package com.sunrun.mpayrecon.processor;
 
-public class BankMerchantStatisticsProcessor {
+import com.sunrun.mpayrecon.model.SessionContext;
+import com.sunrun.mpayrecon.processor.inf.Processor;
+import com.sunrun.mpayrecon.service.SharedService;
+
+public class BankMerchantStatisticsProcessor  implements Processor{
+
+	@Override
+	public void execute(SessionContext sessionContext, SharedService sharedService) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
