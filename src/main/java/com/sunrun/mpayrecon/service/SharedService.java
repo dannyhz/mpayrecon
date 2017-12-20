@@ -6,5 +6,7 @@ public class SharedService {
 		return new MyOrderService();
 	}
 	
-
+	public ChannelOrderService getChannelOrderService(){
+		return new ChannelOrderService();
+	}
 }
