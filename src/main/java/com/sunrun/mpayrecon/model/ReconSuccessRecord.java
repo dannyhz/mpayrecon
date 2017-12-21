@@ -1,5 +1,5 @@
 package com.sunrun.mpayrecon.model;
 
-public class ReconSucessRecord {
+public class ReconSuccessRecord {
 
 }

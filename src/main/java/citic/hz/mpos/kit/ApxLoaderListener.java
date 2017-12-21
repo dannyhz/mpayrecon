@@ -28,7 +28,7 @@ import citic.hz.mpos.service.WxNotifyService;
 public class ApxLoaderListener implements ServletContextListener{
 	
 	protected final static Logger log = Logger.getLogger(new Object(){}.getClass().getEnclosingClass().getName());
-	//private static Config config = Config.getConfig();
+	private static Config config = Config.getConfig();
 	
 	private static DefaultListableBeanFactory bf = null;
 	private static DataSource dataSource = null;
@@ -36,29 +36,29 @@ public class ApxLoaderListener implements ServletContextListener{
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-//		bf = new DefaultListableBeanFactory();
-//		bf.setAllowBeanDefinitionOverriding(false);//关闭bean id自动重载
-//		XmlBeanDefinitionReader bfr = new XmlBeanDefinitionReader((DefaultListableBeanFactory)bf);
-//		int cnt = bfr.loadBeanDefinitions(new ClassPathResource("mpos/beans.xml"));
-//		log.info(cnt+" beans loaded");
-//		DruidDataSource ds = (DruidDataSource)bf.getBean("dataSource");
-//		ds.setUrl(config.get("dbUrl"));
-//		ds.setDriverClassName(config.get("driverClassName"));
-//		ds.setUsername(config.get("dbUser"));
-//		ds.setPassword(config.get("dbPass"));
-//		try {
-//			ds.init();
-//		} catch (SQLException e) {
-//			log.error("ds init failed",e);
-//		}
-//		if(ds.isInited())
-//			dataSource = ds;
-//		
-//		transactionManager = (PlatformTransactionManager)bf.getBean("txManager");
-//		
-//		//通知服务初始化
-//		WxNotifyService.init();
-//		SmsNotifyService.init();
+		bf = new DefaultListableBeanFactory();
+		bf.setAllowBeanDefinitionOverriding(false);//关闭bean id自动重载
+		XmlBeanDefinitionReader bfr = new XmlBeanDefinitionReader((DefaultListableBeanFactory)bf);
+		int cnt = bfr.loadBeanDefinitions(new ClassPathResource("mpos/beans.xml"));
+		log.info(cnt+" beans loaded");
+		DruidDataSource ds = (DruidDataSource)bf.getBean("dataSource");
+		ds.setUrl(config.get("dbUrl"));
+		ds.setDriverClassName(config.get("driverClassName"));
+		ds.setUsername(config.get("dbUser"));
+		ds.setPassword(config.get("dbPass"));
+		try {
+			ds.init();
+		} catch (SQLException e) {
+			log.error("ds init failed",e);
+		}
+		if(ds.isInited())
+			dataSource = ds;
+		
+		transactionManager = (PlatformTransactionManager)bf.getBean("txManager");
+		
+		//通知服务初始化
+		WxNotifyService.init();
+		SmsNotifyService.init();
 	}
 	
 	@Override

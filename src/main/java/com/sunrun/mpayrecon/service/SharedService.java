@@ -9,4 +9,12 @@ public class SharedService {
 	public ChannelOrderService getChannelOrderService(){
 		return new ChannelOrderService();
 	}
+	
+	public ReconService getReconService(){
+		return new ReconService();
+	}
+	
+	public MerchantFeeClearService getMerchantFeeClearService(){
+		return new MerchantFeeClearService();
+	}
 }

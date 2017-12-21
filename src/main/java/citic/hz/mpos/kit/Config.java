@@ -30,24 +30,24 @@ public class Config extends AbstractConfig<Properties> {
 	
 	public Config() {
 		
-//		File cfgfile = null;
-//		if('/' == File.separatorChar)	//linux
-//			cfgfile = new File("/etc/_CONFIG/mposBat.conf");
-//		else{	//windows
-//			String realPath = "";
-//			try {
-//				realPath = new ClassPathResource("mpos/mposBat.conf").getFile().getAbsolutePath();
-//				System.out.println(new ClassPathResource("mpos/mposBat.conf").getFile().getAbsolutePath());
-//			} catch (IOException e) {
-//				log.error("MPayBill 启动 , 加载数据失败", e);
-//			}
-//			
-//			cfgfile = new File(realPath );
-//		}
-//		if(!cfgfile.exists()){
-//			log.error("mposBat config file not found!");
-//		}
-//		setCfgfile(cfgfile);
+		File cfgfile = null;
+		if('/' == File.separatorChar)	//linux
+			cfgfile = new File("/etc/_CONFIG/mposBat.conf");
+		else{	//windows
+			String realPath = "";
+			try {
+				realPath = new ClassPathResource("mpos/mposBat.conf").getFile().getAbsolutePath();
+				System.out.println(new ClassPathResource("mpos/mposBat.conf").getFile().getAbsolutePath());
+			} catch (IOException e) {
+				log.error("MPayBill 启动 , 加载数据失败", e);
+			}
+			
+			cfgfile = new File(realPath );
+		}
+		if(!cfgfile.exists()){
+			log.error("mposBat config file not found!");
+		}
+		setCfgfile(cfgfile);
 	}
 	
 	

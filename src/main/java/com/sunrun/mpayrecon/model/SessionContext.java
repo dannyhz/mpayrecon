@@ -11,6 +11,8 @@ public class SessionContext {
 	private String retMsg;
 	
 	private Map<String, String> paramMap = new HashMap<String, String>();
+
+	private Map<String, Object> storeObjMap = new HashMap<String, Object>();
 	
 	public Map<String, String> putValue(String key, String value){
 		if(key == null){
@@ -27,12 +29,6 @@ public class SessionContext {
 		return paramMap.get(key);
 	} 
 	
-//	public Map<String, String> getParamMap() {
-//		return paramMap;
-//	}
-//	public void setParamMap(Map<String, String> paramMap) {
-//		this.paramMap = paramMap;
-//	}
 	public boolean isExecSucc() {
 		return execSucc;
 	}
@@ -56,6 +52,18 @@ public class SessionContext {
 	}
 	public void setContextData(Object contextData) {
 		this.contextData = contextData;
+	}
+	
+	public Object getObject(String objKey){
+		return storeObjMap.get(objKey);
+	}
+
+	public Object putObject(String objKey, Object obj){
+		return storeObjMap.put(objKey, obj);
+	}
+	
+	public void mergeMap(Map<String, String> newMap){
+		paramMap.putAll(newMap);
 	}
 	
 }

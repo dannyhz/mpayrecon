@@ -1,6 +1,7 @@
 package com.sunrun.mpayrecon.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sunrun.bill.compare.ChannelBill;
 import com.sunrun.bill.service.IMerchantService;
+import com.sunrun.mpayrecon.model.MerchantFeeClearRecord;
+import com.sunrun.mpayrecon.model.MerchantFeeClearSummary;
 import com.sunrun.mpayrecon.model.SessionContext;
 import com.sunrun.mpayrecon.processor.AgentProfitProcessor;
 import com.sunrun.mpayrecon.processor.BankMerchantStatisticsProcessor;
@@ -20,6 +23,7 @@ import com.sunrun.mpayrecon.processor.FeeClearProcessor;
 import com.sunrun.mpayrecon.processor.ReconProcessor;
 import com.sunrun.mpayrecon.processor.inf.Processor;
 import com.sunrun.mpayrecon.service.SharedService;
+import com.sunrun.mpayrecon.service.SplitStrategyMachine;
 
 /**
  * 对账控制类.
@@ -54,15 +58,36 @@ public class ReconController {
     	
     	SessionContext sessionContext = new SessionContext();
     	
-    	for(Processor processor : sequenceProcessors){
+//    	String startTime = sessionContext.getValue("startTime");
+//		String endTime = sessionContext.getValue("endTime");
+//		String checkDate = sessionContext.getValue("checkDate");
+//		String channelNo = sessionContext.getValue("channelNo");
+    	
+    	sessionContext.putValue("channelNo", "30");
+    	sessionContext.putValue("checkDate", "20171221");
+    	SplitStrategyMachine strategyMachine = new SplitStrategyMachine();
+    	List<Map<String, String>> paramList = strategyMachine.generateIteratorList();
+    	
+    	for(Map<String,String> param : paramList){
     		
-    		processor.execute(sessionContext, sharedService);
+    		sessionContext.mergeMap(param);
     		
-    		if(!sessionContext.isExecSucc()){
-    			break;
-    		}
-    		
+	    	for(Processor processor : sequenceProcessors){
+	    		
+	    		processor.execute(sessionContext, sharedService);
+	    		
+	    		if(!sessionContext.isExecSucc()){
+	    			break;
+	    		}
+	    		
+	    	}
+	    	
     	}
+    	
+    	MerchantFeeClearSummary feeClearSummary = (MerchantFeeClearSummary)sessionContext.getObject("feeClearSummary");
+    	Map<String, MerchantFeeClearRecord> normalMerchantFeeClearRecordMap = feeClearSummary.normalMerchantFeeClearRecord;
+    	
+    	
     	
 
     }
