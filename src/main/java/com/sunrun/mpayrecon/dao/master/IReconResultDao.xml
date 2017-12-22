@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrun.mpayrecon.dao.master.IReconResultDao">
+<!--  <insert id="insertReconSuccessRecordList" useGeneratedKeys="false" >   -->
+<!-- 	    insert into BAT2_CMP_RESULT (BATID, MY_ORDER_ID,  CKDT, BANK_CODE)    -->
+<!-- 	    values   -->
+<!-- 	    <foreach collection="list" item="item" index="index" separator="," >   -->
+<!-- 	        ( -->
+<!-- 	    	 #{item.num},#{item.MY_ORDER_ID},#{item.CKDT},#{item.BANK_CODE} -->
+<!-- 	        )   -->
+<!-- 	    </foreach>   -->
+<!-- 	</insert>  -->
+	
+	<resultMap type="com.sunrun.mpayrecon.model.ReconSuccessRecord" id="mkMap">
+		<id column="ID" property="ID"/>
+		<result column="BATID" property="BATID" />
+		<result column="MY_ORDER_ID" property="MY_ORDER_ID" />
+	</resultMap>
+	
+ 	 <sql id="all_columns" >
+ 	 	BATID,
+		MY_ORDER_ID
+	</sql>
+	
+	<select id="querySuccessRecord" resultMap="mkMap" parameterType="java.lang.String">
+		select  
+		<include refid="all_columns"/>
+		  from BAT2_CMP_RESULT where MY_ORDER_ID = #{order_id} 
+	</select>
+	
+</mapper>

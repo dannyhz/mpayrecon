@@ -2,20 +2,20 @@ package com.sunrun.mpayrecon.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.sunrun.mpayrecon.model.ChannelOrder;
+import com.sunrun.mpayrecon.model.ReconFailRecord;
 import com.sunrun.mpayrecon.model.ReconResult;
+import com.sunrun.mpayrecon.model.ReconSuccessRecord;
 import com.sunrun.mpayrecon.model.TxnOrder;
-
-import citic.hz.mpos.service.dao.po.BillingOrder;
-
 
 public class ReconService {
 	
 	
-	public ReconResult recon(List<TxnOrder> txnOrders, List<ChannelOrder> channelOrders, ReconResult reconResult) throws Exception{
+	public ReconResult recon(List<TxnOrder> txnOrders, List<ChannelOrder> channelOrders, List<TxnOrder> txnFailOrders, ReconResult reconResult) throws Exception{
 		
 		Map<String, ChannelOrder> channelOrderMap  = directMakeChannelOrderListConvertToMap(channelOrders);
 		
@@ -113,11 +113,82 @@ public class ReconService {
 			}
 		}
 		
+		//放到Tmp_result
+		Iterator<TxnOrder> txnOrderIt = myOddOrderList.iterator();
+		while(txnOrderIt.hasNext()){
+			TxnOrder txnOrder = txnOrderIt.next();
+			if(txnOrder.getCKFG().equals("0") || txnOrder.getCKFG().equals("-3")  || txnOrder.getCKFG().equals("-4") || txnOrder.getCKFG().equals("-6")){
+				tmpOrders.add(txnOrder);
+				txnOrderIt.remove();
+			}
+		}
 		
-		return null;
+		Iterator<ChannelOrder> channelOrderIt = channelOddOrderList.iterator();
+		while(channelOrderIt.hasNext()){
+			ChannelOrder channelOrder = channelOrderIt.next();
+			if(!channelOrder.getCKFG().equals("1") ){
+				txnOrderIt.remove();
+			}
+		}
+		
+		//第三轮 以渠道方多出来的记录为循环
+		Map<String, TxnOrder> failTxnOrderMap = directMakeMyOrderListConvertToMap(txnFailOrders);
+		Iterator<ChannelOrder> oddChannelOrderIt = channelOddOrderList.iterator();
+		while(oddChannelOrderIt.hasNext()){
+			ChannelOrder channelOrder = oddChannelOrderIt.next();
+			//如果在失败的记录里面找到了这条orderId, 说明这是在我方失败，而在渠道方交易成功的记录，需要把这条放到匹配成功的列表里
+			if(failTxnOrderMap.containsKey(channelOrder.getMY_ORDER_ID())){
+				
+				TxnOrder txnOrder = failTxnOrderMap.get(channelOrder.getMY_ORDER_ID());
+				if(txnOrder.getTRTP().equals(channelOrder.getTRTP()) && txnOrder.getTRAM().equals(channelOrder.getTRAM())){
+					txnOrder.setCKFG("0");	
+				}else if(!txnOrder.getTRTP().equals(channelOrder.getTRTP())){
+					txnOrder.setCKFG("-4");	
+				}else if(!txnOrder.getTRAM().equals(channelOrder.getTRAM())){
+					txnOrder.setCKFG("-3");	
+				}
+				//oddChannelOrderList保持是 渠道方 真正匹配不上的记录
+				oddChannelOrderIt.remove();
+				
+			}
+			
+		}
+		
+		//处理原来在我方失败的交易，把里面做成功的交易放到tmpResult中，然后从失败列表交易中删除
+		Iterator<TxnOrder> iterFailTxnOrders = txnFailOrders.iterator();
+		while(iterFailTxnOrders.hasNext()){
+			TxnOrder txnOrder = iterFailTxnOrders.next();
+			if(txnOrder.getCKFG().equals("0") || txnOrder.getCKFG().equals("-4") 
+					|| txnOrder.getCKFG().equals("-3") ){
+				tmpOrders.add(txnOrder);
+				iterFailTxnOrders.remove();	
+			}
+		}
+		
+		//把本切片所有对上帐的放到 matchOrder，等待插入数据库表BAT2_CMP_RESULT, 其他只有orderid或者 rel_order_id相同，但是金额或类型不同的放入 BAT2_CMP_RESULT_FAIL
+		for(TxnOrder txnOrder:tmpOrders){
+			if(txnOrder.getCKFG().equals("0")){
+				matchOrders.add(txnOrder);
+			}else{
+				notMatchOrders.add(txnOrder);
+			}
+		}
+		
+		reconResult.setSuccessRecords(convertToReconSuccessRecords(matchOrders));
+		reconResult.setFailRecords(convertToReconFailRecords(notMatchOrders));
+		
+		
+		return reconResult;
 	}
 	
-
+	public List<ReconSuccessRecord> convertToReconSuccessRecords(List<TxnOrder> source){
+		return new ArrayList<ReconSuccessRecord>();
+	}
+	
+	public List<ReconFailRecord> convertToReconFailRecords(List<TxnOrder> source){
+		return new ArrayList<ReconFailRecord>();
+	}
+	
 	public Map<String, TxnOrder> directMakeMyOrderListConvertToMap(List<TxnOrder> source) throws Exception{
 		HashMap<String, TxnOrder> hm = new HashMap<String, TxnOrder>();
 		for(TxnOrder order : source){

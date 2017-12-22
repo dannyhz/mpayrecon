@@ -22,8 +22,8 @@ public class ReconProcessor implements Processor{
 		String channelNo = sessionContext.getValue("channelNo");
 		MyOrderService myOrderService = sharedService.getMyOrderService();
 		
-		List<TxnOrder> txnOrders =  myOrderService.getMyOrders(checkDate,startTime,endTime,channelNo);
-		
+		List<TxnOrder> txnSuccessOrders =  myOrderService.getMySuccessOrders(checkDate,startTime,endTime,channelNo);
+		List<TxnOrder> txnFailOrders =  myOrderService.getMyFailOrders(checkDate,startTime,endTime,channelNo);
 		ChannelOrderService channelOrderService = sharedService.getChannelOrderService();
 		
 		List<ChannelOrder> channelOrders =  channelOrderService.getChannelOrders(checkDate,startTime,endTime,channelNo);
@@ -31,11 +31,13 @@ public class ReconProcessor implements Processor{
 		ReconService reconService = sharedService.getReconService();
 		ReconResult reconResult = new ReconResult();
 		try {
-			reconService.recon(txnOrders, channelOrders, reconResult);
+			reconService.recon(txnSuccessOrders, channelOrders, txnFailOrders, reconResult);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		//数据库插入比较完的成功数据和失败数据
 		
 		sessionContext.setExecSucc(true);
 		sessionContext.setContextData(reconResult);

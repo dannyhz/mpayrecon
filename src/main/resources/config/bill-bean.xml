@@ -35,6 +35,12 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 	
+	<!--mpayrecon对账 mybatis操作接口扫描 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.sunrun.mpayrecon.dao.master" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryRecon" />
+	</bean>
+	
 	
 	<!--<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor">
 		<property name="alwaysUseJndiLookup" value="true"/>
