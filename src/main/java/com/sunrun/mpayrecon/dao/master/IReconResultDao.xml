@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunrun.mpayrecon.dao.master.IReconResultDao">
-<!--  <insert id="insertReconSuccessRecordList" useGeneratedKeys="false" >   -->
-<!-- 	    insert into BAT2_CMP_RESULT (BATID, MY_ORDER_ID,  CKDT, BANK_CODE)    -->
-<!-- 	    values   -->
-<!-- 	    <foreach collection="list" item="item" index="index" separator="," >   -->
-<!-- 	        ( -->
-<!-- 	    	 #{item.num},#{item.MY_ORDER_ID},#{item.CKDT},#{item.BANK_CODE} -->
-<!-- 	        )   -->
-<!-- 	    </foreach>   -->
-<!-- 	</insert>  -->
+
+ 	<insert id="insertReconSuccessRecordList" useGeneratedKeys="true" keyProperty="ID" parameterType="java.util.List" >  
+	    insert into BAT2_CMP_RESULT (BATID, MY_ORDER_ID,  CKDT, BANK_CODE)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	        (#{item.BATID},#{item.MY_ORDER_ID},to_date(#{item.CKDT},'yyyy-mm-dd'),#{item.BANK_CODE})  
+	    </foreach>  
+	</insert> 
+	
+	
+	<insert id="insertReconSuccessRecord" useGeneratedKeys="true" parameterType="com.sunrun.mpayrecon.model.ReconSuccessRecord" keyProperty="ID">
+		<![CDATA[
+		insert into 
+			BAT2_CMP_RESULT (BATID, MY_ORDER_ID,  CKDT, BANK_CODE)
+		values(
+			#{BATID},
+			#{MY_ORDER_ID},
+			to_date(#{CKDT},'yyyy-mm-dd'),
+			#{BANK_CODE}
+		)
+		]]>
+	</insert>
 	
 	<resultMap type="com.sunrun.mpayrecon.model.ReconSuccessRecord" id="mkMap">
 		<id column="ID" property="ID"/>
@@ -27,5 +40,6 @@
 		<include refid="all_columns"/>
 		  from BAT2_CMP_RESULT where MY_ORDER_ID = #{order_id} 
 	</select>
+	
 	
 </mapper>

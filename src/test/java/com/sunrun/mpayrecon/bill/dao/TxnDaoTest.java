@@ -10,6 +10,7 @@ import com.sunrun.bill.dao.slave.IBillDao;
 import com.sunrun.bill.model.BillOrderDO;
 
 import citic.hz.mpos.service.dao.po.BillingOrder;
+import citic.hz.mpos.service.dao.po.ResultOrder;
 
 public class TxnDaoTest {
 	
@@ -31,6 +32,21 @@ public class TxnDaoTest {
 	     
 	     System.out.println(((BillingOrder)list.get(0)).getTPAM_TXN_ID()); 
 	     System.out.println(((BillingOrder)list.get(0)).getTRAM());
+	     
+	}
+	
+	@Test
+	public void getResult(){
+	
+		 ApplicationContext act = new ClassPathXmlApplicationContext(new String[] { "config/bill-context.xml" });
+
+		 IResultDao dao = (IResultDao) act.getBean(IResultDao.class);
+	     
+	     //List<ResultOrder> list =  dao.queryTxn("1");
+		 List<ResultOrder> list =  dao.queryTxn("1477859");
+	     System.out.println(list.size());
+	     
+	     System.out.println(((ResultOrder)list.get(0)).getMY_ORDER_ID()); 
 	     
 	}
 

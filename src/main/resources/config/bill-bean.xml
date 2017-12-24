@@ -8,7 +8,8 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 	
 	<!-- 扫描注解组件-->
-	<context:component-scan base-package="com.sunrun.bill.service,com.sunrun.bill.compare,com.sunrun.bill.holder"/>
+	<context:component-scan base-package="com.sunrun.mpayrecon.dao.master"/> 
+<!-- 	<context:component-scan base-package="com.sunrun.bill.service,com.sunrun.bill.compare,com.sunrun.bill.holder"/> -->
 	
 	<!-- mybatis操作接口扫描  
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
@@ -18,29 +19,32 @@
 	-->
 	
 	<!-- 只读mybatis操作接口扫描 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.sunrun.*.dao.slave" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactorySlave" />
-	</bean>
+<!-- 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+<!-- 		<property name="basePackage" value="com.sunrun.*.dao.slave" /> -->
+<!-- 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactorySlave" /> -->
+<!-- 	</bean> -->
 	
 	<!--读写mybatis操作接口扫描 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.sunrun.*.dao.master" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryMaster" />
-	</bean>
+<!-- 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+<!-- 		<property name="basePackage" value="com.sunrun.*.dao.master" /> -->
+<!-- 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryMaster" /> -->
+<!-- 	</bean> -->
 	
 	<!--mpayrecon对账 mybatis操作接口扫描 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.sunrun.mpayrecon.bill.dao" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-	</bean>
+<!-- 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+<!-- 		<property name="basePackage" value="com.sunrun.mpayrecon.bill.dao" /> -->
+<!-- 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" /> -->
+<!-- 	</bean> -->
 	
 	<!--mpayrecon对账 mybatis操作接口扫描 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.sunrun.mpayrecon.dao.master" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryRecon" />
 	</bean>
-	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.sunrun.mpayrecon.dao.slave" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryReconQuery" />
+	</bean>
 	
 	<!--<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor">
 		<property name="alwaysUseJndiLookup" value="true"/>
@@ -63,30 +67,30 @@
 	</bean>-->
 	
 	<!-- 业务注册类 -->
-    <bean id="yzfDbOpt" class="com.sunrun.bill.db.DefaultDbOpt">  
-    </bean> 
-    <bean id="zjDbOpt" class="com.sunrun.bill.db.DefaultDbOpt">  
-    </bean> 
-    <bean id="yzfFileOpt" class="com.sunrun.bill.file.YzfFileOpt">  
-    	<!-- <constructor-arg name="date" value="" /> -->
-    </bean>
-     <bean id="zjFileOpt" class="com.sunrun.bill.file.ZjFileOpt">  
-     	<!--<constructor-arg name="date" value="" />-->
-    </bean>
-    <bean id="yzfHolder" class="com.sunrun.bill.holder.CompareDataParamHolder">
-		<constructor-arg name="fileOpt" ref="yzfFileOpt" />
-        <constructor-arg name="dbOpt" ref="yzfDbOpt" />  
-    </bean>
-    <bean id="zjHolder" class="com.sunrun.bill.holder.CompareDataParamHolder">  
-     	<constructor-arg name="fileOpt" ref="zjFileOpt" />
-        <constructor-arg name="dbOpt" ref="zjDbOpt" />  
-    </bean>
-    <bean id="holderContainer" class="com.sunrun.bill.holder.HolderContainer">
-    	<property name="holderList">
-    		<list>
-    			<ref bean="yzfHolder"></ref>
-    			<ref bean="zjHolder"></ref>
-    		</list>
-    	</property>
-    </bean>
+<!--     <bean id="yzfDbOpt" class="com.sunrun.bill.db.DefaultDbOpt">   -->
+<!--     </bean>  -->
+<!--     <bean id="zjDbOpt" class="com.sunrun.bill.db.DefaultDbOpt">   -->
+<!--     </bean>  -->
+<!--     <bean id="yzfFileOpt" class="com.sunrun.bill.file.YzfFileOpt">   -->
+<!--     	<constructor-arg name="date" value="" /> -->
+<!--     </bean> -->
+<!--      <bean id="zjFileOpt" class="com.sunrun.bill.file.ZjFileOpt">   -->
+<!--      	<constructor-arg name="date" value="" /> -->
+<!--     </bean> -->
+<!--     <bean id="yzfHolder" class="com.sunrun.bill.holder.CompareDataParamHolder"> -->
+<!-- 		<constructor-arg name="fileOpt" ref="yzfFileOpt" /> -->
+<!--         <constructor-arg name="dbOpt" ref="yzfDbOpt" />   -->
+<!--     </bean> -->
+<!--     <bean id="zjHolder" class="com.sunrun.bill.holder.CompareDataParamHolder">   -->
+<!--      	<constructor-arg name="fileOpt" ref="zjFileOpt" /> -->
+<!--         <constructor-arg name="dbOpt" ref="zjDbOpt" />   -->
+<!--     </bean> -->
+<!--     <bean id="holderContainer" class="com.sunrun.bill.holder.HolderContainer"> -->
+<!--     	<property name="holderList"> -->
+<!--     		<list> -->
+<!--     			<ref bean="yzfHolder"></ref> -->
+<!--     			<ref bean="zjHolder"></ref> -->
+<!--     		</list> -->
+<!--     	</property> -->
+<!--     </bean> -->
 </beans>

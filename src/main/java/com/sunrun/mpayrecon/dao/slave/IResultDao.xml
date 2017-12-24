@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrun.mpayrecon.dao.slave.IResultDao">
+
+	<resultMap type="citic.hz.mpos.service.dao.po.ResultOrder" id="mkMap">
+		<id column="id" property="id"/>
+		<result column="MY_ORDER_ID" property="MY_ORDER_ID" />
+	</resultMap>
+	
+ 	 <sql id="all_columns" >
+ 	  	MY_ORDER_ID 
+	</sql>
+	
+	<select id="queryTxn" resultMap="mkMap" parameterType="java.lang.String">
+		select  
+		<include refid="all_columns"/>
+		  from BAT2_CMP_RESULT_FAIL where id = #{id} 
+	</select>
+
+</mapper>

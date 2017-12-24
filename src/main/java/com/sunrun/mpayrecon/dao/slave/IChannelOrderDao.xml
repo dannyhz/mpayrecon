@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrun.mpayrecon.dao.slave.IChannelOrderDao">
+
+	<resultMap type="com.sunrun.mpayrecon.model.ChannelOrder" id="mkMap">
+		<id column="id" property="id"/>
+		<result column="TRTM" property="TRTM" />
+		<result column="CHANNEL_NO" property="CHANNEL_NO" />
+		<result column="CHL_ORDER_ID" property="CHL_ORDER_ID" />
+		<result column="MY_ORDER_ID" property="MY_ORDER_ID" />
+		<result column="MCH_NO" property="MCH_NO" />
+		<result column="SEC_MCH_NO" property="SEC_MCH_NO" />
+		<result column="TRAM" property="TRAM" />
+		<result column="TRTP" property="TRTP" />
+		<result column="REL_ORDER_ID" property="REL_ORDER_ID" />
+		<result column="MEMO" property="MEMO" />
+		<result column="CLDT" property="CLDT" />
+		<result column="BNO" property="BNO" />
+		<result column="PAYBANK" property="PAYBANK" />
+	</resultMap>
+	
+ 	 <sql id="all_columns" >
+		 	TRTM,
+			CHANNEL_NO,
+			CHL_ORDER_ID,
+			MY_ORDER_ID,
+			MCH_NO,
+			SEC_MCH_NO,
+			TRAM,
+			TRTP,
+			REL_ORDER_ID,
+			MEMO,
+			CLDT,
+			BNO,
+			PAYBANK
+	</sql>
+	
+	<select id="queryChannelTxn" resultMap="mkMap" parameterType="java.lang.String">
+		select  
+		<include refid="all_columns"/>
+		  from BAT2_CMP_CHL_DTL where id = #{id} 
+	</select>
+
+</mapper>

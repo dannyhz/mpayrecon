@@ -2,7 +2,14 @@ package com.sunrun.mpayrecon.model;
 
 public class ReconSuccessRecord {
 	
-	private String	ID;
+	private Long ID;
+	
+	public Long getID() {
+		return ID;
+	}
+	public void setID(Long iD) {
+		ID = iD;
+	}
 	private String	SYSTM;//入库时间戳
 	private String	BATID;//对账批次号
 	private String	CLDT;//清算日期,来源于订单支付完成的渠道日期
@@ -48,12 +55,7 @@ public class ReconSuccessRecord {
 	public void setNum(int num) {
 		this.num = num;
 	}
-	public String getID() {
-		return ID;
-	}
-	public void setID(String iD) {
-		ID = iD;
-	}
+
 	public String getSYSTM() {
 		return SYSTM;
 	}

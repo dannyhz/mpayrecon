@@ -8,7 +8,9 @@ import com.sunrun.mpayrecon.model.ReconSuccessRecord;
 
 public interface IReconResultDao {
 
-    long insertReconSuccessRecordList(@Param("list") List<ReconSuccessRecord> list);
+    void insertReconSuccessRecordList(@Param("list") List<ReconSuccessRecord> list);
+
+    void insertReconSuccessRecord(ReconSuccessRecord successRecord);
 
 //    void insertControl(BillControlDO controlDO);
 //
