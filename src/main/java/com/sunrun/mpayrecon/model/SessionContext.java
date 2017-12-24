@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class SessionContext {
 	
-	private Object contextData;
 	private boolean execSucc;
 	private String retCode;
 	private String retMsg;
@@ -46,12 +45,6 @@ public class SessionContext {
 	}
 	public void setRetCode(String retCode) {
 		this.retCode = retCode;
-	}
-	public Object getContextData() {
-		return contextData;
-	}
-	public void setContextData(Object contextData) {
-		this.contextData = contextData;
 	}
 	
 	public Object getObject(String objKey){

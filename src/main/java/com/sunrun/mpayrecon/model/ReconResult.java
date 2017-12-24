@@ -1,6 +1,7 @@
 package com.sunrun.mpayrecon.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class ReconResult {
 	
@@ -20,6 +21,22 @@ public class ReconResult {
 		this.failRecords = failRecords;
 	}
 
+	private List<TxnOrder> oddTxnOrdersHistory;
+	private List<ChannelOrder> oddChannelOrdersHistory;
+	
+	public List<ChannelOrder> getOddChannelOrdersHistory() {
+		return oddChannelOrdersHistory;
+	}
+	public void setOddChannelOrdersHistory(List<ChannelOrder> oddChannelOrdersHistory) {
+		this.oddChannelOrdersHistory = oddChannelOrdersHistory;
+	}
+
+	public List<TxnOrder> getOddTxnOrdersHistory() {
+		return oddTxnOrdersHistory;
+	}
+	public void setOddTxnOrdersHistory(List<TxnOrder> oddTxnOrdersHistory) {
+		this.oddTxnOrdersHistory = oddTxnOrdersHistory;
+	}
 	
 	
 }

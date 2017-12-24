@@ -48,19 +48,23 @@ public class ReconService {
 						
 		}
 		
-		List<ChannelOrder> channelOrderOddList = new ArrayList<ChannelOrder>(); 
 		//2.反过来， 以渠道方做循环，渠道方多的过滤出来
 		Map<String, TxnOrder> myOrderMap  = directMakeMyOrderListConvertToMap(txnOrders);
 		for(ChannelOrder channelOrder : channelOrders){
 			if(!myOrderMap.containsKey(channelOrder.getMY_ORDER_ID())){
 				channelOrder.setCKFG("1");
-				//channelOrderOddList.add(channelOrder);
 			}			
 		}
 		//只要order id 匹配都放到 TmpOrders
 		List<TxnOrder> tmpOrders = new ArrayList<TxnOrder>();
+		
+		
+		//得到历史多余交易记录
+		
 		//我方多的留在 myOrderOddList  , 渠道方多的 留在 channelOrderOddList  
 		List<TxnOrder> myOddOrderList = new ArrayList<TxnOrder>();
+		//把历史的我方多余未对上记录并入这次未对上的记录数组内
+		myOddOrderList.addAll(reconResult.getOddTxnOrdersHistory());
 		//清理第一轮数据， 把数据源对上 0 -4 -3 都放到TMP_RESULT中
 		for(TxnOrder txnOrder : txnOrders){
 			if(txnOrder.getCKFG().equals("0") || txnOrder.getCKFG().equals("-4") || txnOrder.getCKFG().equals("-3")){
@@ -73,6 +77,8 @@ public class ReconService {
 		}
 		//渠道多的放到channelOddOrderList
 		List<ChannelOrder> channelOddOrderList = new ArrayList<ChannelOrder>();
+		//把历史的渠道多余未对上记录并入这次未对上的记录数组内
+		channelOddOrderList.addAll(reconResult.getOddChannelOrdersHistory());
 		for(ChannelOrder channelOrder : channelOrders){
 			if(channelOrder.getCKFG().equals("1")){
 				channelOddOrderList.add(channelOrder);
@@ -173,10 +179,12 @@ public class ReconService {
 				notMatchOrders.add(txnOrder);
 			}
 		}
-		
+		//比较完后， 把对上的记录放到  success records, 没对上的放入 fail records
 		reconResult.setSuccessRecords(convertToReconSuccessRecords(matchOrders));
 		reconResult.setFailRecords(convertToReconFailRecords(notMatchOrders));
-		
+		//比较完后把 当前 我方以及渠道比较没有对上的记录放入reconResult
+		reconResult.setOddTxnOrdersHistory(myOddOrderList);
+		reconResult.setOddChannelOrdersHistory(channelOddOrderList);
 		
 		return reconResult;
 	}
