@@ -37,7 +37,6 @@ public class ReconProcessor implements Processor{
 		try {
 			reconService.recon(txnSuccessOrders, channelOrders, txnFailOrders, reconResult);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			sessionContext.setExecSucc(false);
 			return;

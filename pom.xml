@@ -164,39 +164,7 @@
 		<groupId>dom4j</groupId>
 		<artifactId>dom4j</artifactId>
 	</dependency>
-   	
-	<!-- other lib -->
-<!-- 	<dependency>
-		<groupId>org.apache.tomcat</groupId>
-		<artifactId>tomcat-juli</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>aopalliance</groupId>
-		<artifactId>aopalliance</artifactId>
-	</dependency> -->
 	
-<!-- 	<dependency>
-		<groupId>com.github.jsqlparser</groupId>
-		<artifactId>jsqlparser</artifactId>
-		<exclusions>
-			<exclusion>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency> -->
-<!-- 	<dependency>
-		<groupId>javassist</groupId>
-		<artifactId>javassist</artifactId>
-	</dependency> -->
-<!-- 	<dependency>
-		<groupId>antlr</groupId>
-		<artifactId>antlr</artifactId>
-	</dependency> -->
-<!-- 	<dependency>
-		<groupId>dom4j</groupId>
-		<artifactId>dom4j</artifactId>
-	</dependency> -->
 	<dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-api</artifactId>
@@ -250,6 +218,12 @@
 		<artifactId>commons-net</artifactId>
 		<version>3.3</version>
 	</dependency>
+	<dependency>
+		  <groupId>org.mockito</groupId>
+		  <artifactId>mockito-core</artifactId>
+		  <scope>test</scope>
+	</dependency>
+	
   </dependencies> 
   <build>
     <finalName>mpayrecon</finalName>
