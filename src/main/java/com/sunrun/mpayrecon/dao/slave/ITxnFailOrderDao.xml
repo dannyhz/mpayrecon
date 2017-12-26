@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sunrun.mpayrecon.dao.slave.ITxnOrderDao">
+<mapper namespace="com.sunrun.mpayrecon.dao.slave.ITxnFailOrderDao">
 
 	<resultMap type="com.sunrun.mpayrecon.model.TxnOrder" id="mkMap">
 		<id column="id" property="id"/>
@@ -30,6 +30,7 @@
 		<result column="TRADE_CODE" property="TRADE_CODE" />
 		<result column="PAYBANK" property="PAYBANK" />
 		<result column="BANK_CODE" property="BANK_CODE" />
+		<result column="TXN_STATE" property="TXN_STATE" />
 	</resultMap>
 	
  	 <sql id="all_columns" >
@@ -59,20 +60,15 @@
 		D0FG,
 		TRADE_CODE,
 		PAYBANK,
-		BANK_CODE
+		BANK_CODE,
+		TXN_STATE
 	</sql>
-	
-	<select id="queryTxn" resultMap="mkMap" parameterType="java.lang.String">
-		select  
-		<include refid="all_columns"/>
-		  from BAT2_CMP_RESULT_FAIL where id = #{id} 
-	</select>
 
-	<!-- select * from bat2_cmp_chl_dtl where channel_no = 30 and trtm < '2017-11-03 10:31:31' and trtm > '2017-11-01 10:46:03' -->
-	<select id="queryTxnOrderByTimeAndChannel" resultMap="mkMap" parameterType="java.lang.String">
+	<!-- select * from BAT2_CMP_MPOS_DTL_FAIL where channel_no = 30 and trtm < '2017-11-03 10:31:31' and trtm > '2017-11-01 10:46:03' -->
+	<select id="queryTxnFailOrderByTimeAndChannel" resultMap="mkMap" parameterType="java.lang.String">
 		select  
 		<include refid="all_columns"/>
-		  from bat2_cmp_mpos_dtl where channel_no = #{channelNo} 
+		  from bat2_cmp_mpos_dtl_fail where channel_no = #{channelNo} 
 		  <![CDATA[
 				 and trtm >= #{startDateAndTime} and trtm < #{endDateAndTime}  
 				]]> 

@@ -97,29 +97,29 @@ public class ReconServiceTest {
 	 *  
 	 *  
 	 *  ----------PIECE 1 ---------
-success order:
-order id : 200001
-order id : 200007_txn
-order id : 200006
-fail order:
-order id : 200002
-order id : 200003
-odd txn order in history:
-order id : 200004
-order id : 200009
-odd channel order in history:
-order id : 200005
-order id : 200008
-----------PIECE 2 ---------
-success order:
-order id : 200010
-order id : 200009
-fail order:
-odd txn order in history:
-order id : 200004
-odd channel order in history:
-order id : 200005
-order id : 200008
+		success order:
+		order id : 200001
+		order id : 200007_txn
+		order id : 200006
+		fail order:
+		order id : 200002
+		order id : 200003
+		odd txn order in history:
+		order id : 200004
+		order id : 200009
+		odd channel order in history:
+		order id : 200005
+		order id : 200008
+		----------PIECE 2 ---------
+		success order:
+		order id : 200010
+		order id : 200009
+		fail order:
+		odd txn order in history:
+		order id : 200004
+		odd channel order in history:
+		order id : 200005
+		order id : 200008
 	 *  
 	 */
 	@Test
@@ -192,7 +192,6 @@ order id : 200008
 				System.out.println("order id : " + successRecord.getMY_ORDER_ID());
 			}
 			Assert.assertEquals(3, reconResult.getSuccessRecords().size());
-			
 			
 			System.out.println("fail order:");			
 			for(ReconFailRecord failRecord : reconResult.getFailRecords()){

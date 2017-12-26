@@ -15,6 +15,7 @@ import com.sunrun.mpayrecon.model.TxnOrder;
 
 public class ReconService {
 	
+	
 	/**
 	 * 对账主逻辑
 	 * @param txnOrders 我方本时间片成功交易 
@@ -234,10 +235,38 @@ public class ReconService {
 		return reconResult;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * INSERT INTO MPOS.BAT2_CMP_RESULT(BATID, CLDT, SRC, TRTM, CHANNEL_NO, CHL_ORDER_ID, MY_ORDER_ID, MCH_NO, 
+	 * SEC_MCH_NO, TRAM, TRTP, REL_ORDER_ID, MEMO, BRH_ID, MY_MCH_NO, MY_SEC_MCH_NO,TERM_NO,
+		COST_RATE,TOTAL_RATE,COST,TOTAL_FEE,RZAMT,CKTURN, CKFG,CKDT,TRADE_TYPE,MCH_ORDER_ID,
+		REL_MCH_ORDER_ID,PAYBANK,FZFG,MY_PTMCH_RATE,MY_PTMCH_FEE,D0FG,TRADE_CODE, BANK_CODE)
+		
+		SELECT A.BATID, TO_DATE(A.CLDT,'YYYYMMDD'), 'BOTH', A.TRTM, A.CHANNEL_NO, A.CHL_ORDER_ID, A.MY_ORDER_ID, A.MCH_NO, 
+		A.SEC_MCH_NO, A.TRAM, A.TRTP, A.REL_ORDER_ID, A.MEMO, A.BRH_ID, A.MY_MCH_NO, A.MY_SEC_MCH_NO,A.TERM_NO,
+		B.MAIN_COST_RATE,VALUE(A.MY_SEC_MCH_RATE,A.MY_MCH_RATE),	--渠道成本费率，向商户收取费率
+		CAST(ROUND(A.TRAM*B.MAIN_COST_RATE/100,2) AS DEC(15,2)),	--成本
+		CAST(ROUND(A.TRAM*VALUE(A.MY_SEC_MCH_RATE,A.MY_MCH_RATE)/100,2) AS DEC(15,2)),	--从交易金额中扣下的总费用，包括成本
+		A.TRAM - CAST(ROUND(A.TRAM*VALUE(A.MY_SEC_MCH_RATE,A.MY_MCH_RATE)/100,2) AS DEC(15,2)),	--商户的入账金额
+		A.CKTURN, A.CKFG,A.CKDT,A.TRADE_TYPE,A.MCH_ORDER_ID,A.REL_MCH_ORDER_ID,A.PAYBANK,A.FZFG,
+		A.MY_SEC_MCH_RATE-A.MY_MCH_RATE,	--分账模式下平台商户的利差费率,普通模式下该字段为NULL
+		CAST(ROUND(A.TRAM*(A.MY_SEC_MCH_RATE-A.MY_MCH_RATE)/100,2) AS DEC(15,2)),	--分账模式下平台商户的利差金额
+		A.D0FG,A.TRADE_CODE, A.BANK_CODE
+	FROM SESSION.TMP_BAT2_CMP_RESULT A
+	LEFT JOIN IMP_MAIN_MCHT_INFO B ON A.MCH_NO=B.MAIN_MCHT_NO 
+	
+	
+	 * @param source
+	 * @return
+	 */
 	public List<ReconSuccessRecord> convertToReconSuccessRecords(List<TxnOrder> source){
 		List<ReconSuccessRecord> reconSuccessRecords = new ArrayList<ReconSuccessRecord>();
 		for(TxnOrder txnOrder : source){
 			ReconSuccessRecord successRecord = new ReconSuccessRecord();
+			
+			successRecord.setBATID(txnOrder.getBATID());
+			
 			successRecord.setBANK_CODE(txnOrder.getBANK_CODE());
 			successRecord.setMY_ORDER_ID(txnOrder.getMY_ORDER_ID());
 			successRecord.setTRAM(txnOrder.getTRAM());

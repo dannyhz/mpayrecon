@@ -1,17 +1,29 @@
 package com.sunrun.mpayrecon.service;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+@Service
 public class SharedService {
 	
-	public MyOrderService getMyOrderService(){
-		return new MyOrderService();
+	@Resource
+	private TxnOrderService myOrderService;
+	@Resource
+	private ChannelOrderService channelOrderService;
+	@Resource
+	private ReconService reconService;
+	
+	public TxnOrderService getTxnOrderService(){
+		return myOrderService;
 	}
 	
 	public ChannelOrderService getChannelOrderService(){
-		return new ChannelOrderService();
+		return channelOrderService;
 	}
 	
 	public ReconService getReconService(){
-		return new ReconService();
+		return reconService;
 	}
 	
 	public MerchantFeeClearService getMerchantFeeClearService(){

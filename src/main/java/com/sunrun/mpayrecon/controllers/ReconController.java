@@ -30,36 +30,34 @@ import com.sunrun.mpayrecon.processor.BankMerchantStatisticsProcessor;
 import com.sunrun.mpayrecon.processor.FeeClearProcessor;
 import com.sunrun.mpayrecon.processor.ReconProcessor;
 import com.sunrun.mpayrecon.processor.inf.Processor;
+import com.sunrun.mpayrecon.service.ReconDaoService;
 import com.sunrun.mpayrecon.service.SharedService;
 import com.sunrun.mpayrecon.service.SplitStrategyMachine;
 
 /**
  * 对账控制类.
  *
- * @author zhuxiang
- * @since V1.0.0
+ * @author Zhu Xiang
+ * @since v1.0.0
  */
-@Controller
+//@Controller
 public class ReconController {
+	
     private static final Logger logger = LoggerFactory.getLogger(ReconController.class);
 
     @Autowired
-    private List<ChannelBill> channelBillList;
-
-    @Autowired
-    private IMerchantService merchantService;
-
-    private List<Processor> sequenceProcessors;
-    
     private SharedService sharedService;
+    
+    @Autowired
+    private ReconDaoService reconDaoService;
     
     private ReconProcessor reconProcessor = new ReconProcessor();
     private FeeClearProcessor feeClearProcessor = new FeeClearProcessor();
     private AgentProfitProcessor agentProfitProcessor = new AgentProfitProcessor();
     private BankMerchantStatisticsProcessor bankMerchantStatisticsProcessor = new BankMerchantStatisticsProcessor();
     
-    @ResponseBody
-    @RequestMapping("/recon")
+//    @ResponseBody
+//    @RequestMapping("/recon")
     public void execute(HttpServletRequest req) {
     	
 //    	sequenceProcessors.add(new ReconProcessor());
@@ -86,26 +84,26 @@ public class ReconController {
     		sessionContext.mergeMap(param);
     		
     		//先从一个对账的 处理类根据 sessionContext里面的参数，进行查询，来得到对账结果。 对账结果 BAT2_CMP_Result 放到 sessionContext中
-    			reconProcessor.execute(sessionContext, sharedService);
-    			
-    			//执行完 ,如果  sessionContext 的 这个方法 返回时false， 说明执行出了问题 ， 就跳出循环，结束整个程序
-    			if(!sessionContext.isExecSucc()){
-	    			break;
-	    		}
-    			//得到 成功的平帐信息， 这是要给后面3个 processor使用的数据
-    			ReconResult reconResult = (ReconResult)sessionContext.getObject(ReconConstants.RECON_RESULT);
-    			//需要把本地两边都多余的记录留给下一次时间片进来再参与比较。
-    			
-    			//保存匹配上的记录 
-    			saveMatchRecord(reconResult.getSuccessRecords());
-    			//保存没匹配上的记录
-    			saveFailMatchRecord(reconResult.getFailRecords());
-    			
-    			//缓存里需要存放，下面三个方法的累积数据， 知道最后时间片执行完， 再把这三个方法最新累积的数据，写入数据库
-    			//后面的三个Processor都用这个CMP_RESULT来计算， 也把累计的结果放到sessionContext中
-    			feeClearProcessor.execute(sessionContext, sharedService);
-    			agentProfitProcessor.execute(sessionContext, sharedService);
-    			bankMerchantStatisticsProcessor.execute(sessionContext, sharedService);
+			reconProcessor.execute(sessionContext, sharedService);
+			
+			//执行完 ,如果  sessionContext 的 这个方法 返回时false， 说明执行出了问题 ， 就跳出循环，结束整个程序
+			if(!sessionContext.isExecSucc()){
+    			break;
+    		}
+			//得到 成功的平帐信息， 这是要给后面3个 processor使用的数据
+			ReconResult reconResult = (ReconResult)sessionContext.getObject(ReconConstants.RECON_RESULT);
+			//需要把本地两边都多余的记录留给下一次时间片进来再参与比较。
+			
+			//保存匹配上的记录 
+			saveMatchRecord(reconResult.getSuccessRecords());
+			//保存没匹配上的记录
+			saveFailMatchRecord(reconResult.getFailRecords());
+			
+			//缓存里需要存放，下面三个方法的累积数据， 知道最后时间片执行完， 再把这三个方法最新累积的数据，写入数据库
+			//后面的三个Processor都用这个CMP_RESULT来计算， 也把累计的结果放到sessionContext中
+			feeClearProcessor.execute(sessionContext, sharedService);
+			agentProfitProcessor.execute(sessionContext, sharedService);
+			bankMerchantStatisticsProcessor.execute(sessionContext, sharedService);
     			
     	}
     	//在时间片执行完 再进行的把 最终没有匹配 记录的 odd 记录保存到cmp_result_fail中
@@ -172,8 +170,15 @@ public class ReconController {
 		
 	}
 
+	
+	
 	private void saveMatchRecord(List<ReconSuccessRecord> successRecords) {
-		// TODO Auto-generated method stub
+		
+		for(ReconSuccessRecord successRecord : successRecords){
+			
+			//successRecord
+			
+		}
 		
 	}
 

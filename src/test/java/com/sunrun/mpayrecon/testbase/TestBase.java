@@ -5,7 +5,7 @@ import com.sunrun.mpayrecon.model.TxnOrder;
 
 public class TestBase {
 
-	private TxnOrder generateTxnOrder(){
+	public TxnOrder generateTxnOrder(){
 		TxnOrder order = new TxnOrder();
 		
 		order.setTRTM("20171101 100001");
@@ -39,7 +39,7 @@ public class TestBase {
 		return order;
 	}
 
-	private ChannelOrder generateChannelOrder(){
+	public ChannelOrder generateChannelOrder(){
 		ChannelOrder order = new ChannelOrder();
 		
 		order.setTRTM("20171101 100001");

@@ -2,6 +2,8 @@ package com.sunrun.mpayrecon.model;
 
 public class TxnOrder {
 	
+	private String id;
+	
 	private String TRTM;//交易时间
 	private String CHANNEL_NO;//渠道
 	private String CHL_ORDER_ID;//渠道方订单号
@@ -20,6 +22,7 @@ public class TxnOrder {
 	private String BNO;//入库批次号（与BATID不同）
 	private String TRADE_TYPE;//交易方式，如JSAPI、NATIVE、MICROPAY
 	private String MCH_ORDER_ID;//商户订单号
+	
 	private String REL_MCH_ORDER_ID;//商户相关订单号（预留，暂无数据）
 	private String FZFG;//分账标记 N-不分帐 Y-分账
 	private String MY_MCH_RATE;//分账模式下为平台商户费率，普通模式下为普通商户费率
@@ -29,13 +32,28 @@ public class TxnOrder {
 	private String PAYBANK;//付款银行
 	private String BANK_CODE;//银行编号
 	
-	private String CKFG;//比较标识  0 匹配  ， 我方多 2， 渠道方多1，  金额不等 -3 ， 交易类型不等 -4
+	private String TXN_STATE;//交易状态
 	
+	private String CKFG;//比较标识  0 匹配  ， 我方多 2， 渠道方多1，  金额不等 -3 ， 交易类型不等 -4
+	private String BATID;//本次批次号
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getBATID() {
+		return BATID;
+	}
+	public void setBATID(String bATID) {
+		BATID = bATID;
+	}
 	public String getTRTM() {
 		return TRTM;
 	}
-	public void setTRTM(String tRTM) {
-		TRTM = tRTM;
+	public void setTRTM(String TRTM) {
+		this.TRTM = TRTM;
 	}
 	public String getCHANNEL_NO() {
 		return CHANNEL_NO;
@@ -195,4 +213,10 @@ public class TxnOrder {
 		CKFG = cKFG;
 	}
 
+	public String getTXN_STATE() {
+		return TXN_STATE;
+	}
+	public void setTXN_STATE(String tXN_STATE) {
+		TXN_STATE = tXN_STATE;
+	}
 }

@@ -8,7 +8,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 	
 	<!-- 扫描注解组件-->
-	<context:component-scan base-package="com.sunrun.mpayrecon.dao.master"/> 
+	<context:component-scan base-package="com.sunrun.mpayrecon.service,com.sunrun.mpayrecon.processor"/> 
 <!-- 	<context:component-scan base-package="com.sunrun.bill.service,com.sunrun.bill.compare,com.sunrun.bill.holder"/> -->
 	
 	<!-- mybatis操作接口扫描  

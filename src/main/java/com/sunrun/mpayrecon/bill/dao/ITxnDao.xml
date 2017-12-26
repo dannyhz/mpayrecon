@@ -19,6 +19,8 @@
 		  from ONL_ORDER_TXN_INFO where tpam_txn_id = #{txnId} 
 	</select>
 	
+	
+	
 	<!-- 根据Id进行查询 -->
 <!-- 	<select id="queryKeyById" resultMap="mkMap"> -->
 <!-- 		select -->

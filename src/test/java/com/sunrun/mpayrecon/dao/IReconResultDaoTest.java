@@ -19,7 +19,6 @@ import citic.hz.mpos.service.dao.po.ResultOrder;
 
 public class IReconResultDaoTest {
 
-	
 	//INSERT INTO BAT2_CMP_RESULT( BATID, MY_ORDER_ID,  CKDT, BANK_CODE) VALUES (3, '1001', '2017-12-11', '302331033102');
 		@Test
 		public void suppose_insert_BAT2_CMP_RESULT_successful(){
